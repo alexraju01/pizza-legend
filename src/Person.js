@@ -3,8 +3,10 @@ import { GameObject } from "./GameObject.js";
 export class Person extends GameObject {
 	constructor(config) {
 		super(config);
-		this.movingProgressRemaining = 16;
+		this.movingProgressRemaining = 0;
 		this.isplayerControlled = config.isplayerControlled || false;
+
+		this.direction = config.direction || "down";
 
 		this.directionUpdate = {
 			up: ["y", -1],
@@ -16,6 +18,7 @@ export class Person extends GameObject {
 
 	update(state) {
 		this.updatePosition();
+		this.updateSprite(state);
 
 		if (this.isplayerControlled && this.movingProgressRemaining === 0 && state.arrow) {
 			this.direction = state.arrow;
@@ -28,6 +31,14 @@ export class Person extends GameObject {
 			const [property, change] = this.directionUpdate[this.direction];
 			this[property] += change;
 			this.movingProgressRemaining -= 1;
+		}
+	}
+
+	updateSprite(state) {
+		if (this.movingProgressRemaining > 0) {
+			this.sprite.setAnimation("walk-" + this.direction);
+		} else {
+			this.sprite.setAnimation("idle-" + this.direction);
 		}
 	}
 }
