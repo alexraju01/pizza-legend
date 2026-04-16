@@ -1,4 +1,5 @@
 import { GameObject } from "./GameObject.js";
+import { OverworldMap } from "./OverworldMap.js";
 
 export class Overworld {
 	constructor(config) {
@@ -13,15 +14,17 @@ export class Overworld {
 			// Clear the canvas
 			this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-			// Draw Background
-			if (this.map) {
-				this.ctx.drawImage(this.map, 0, 0);
-			}
+			// Draw Lower Layer
+			this.map.drawLowerImage(this.ctx);
 
 			// Draw Game Objects
-			Object.values(this.gameObjects).forEach((object) => {
+			Object.values(this.map.gameObjects).forEach((object) => {
+				// object.x += 0.1;
 				object.sprite.draw(this.ctx);
 			});
+
+			// Draw Upper Layer
+			this.map.drawUpperImage(this.ctx);
 
 			requestAnimationFrame(step);
 		};
@@ -29,18 +32,8 @@ export class Overworld {
 	}
 
 	init() {
-		// Load Map
-		this.map = new Image();
-		this.map.src = "/assets/images/maps/DemoLower.png";
-
-		this.gameObjects = {
-			hero: new GameObject({ x: 5, y: 6 }),
-			npc1: new GameObject({
-				x: 7,
-				y: 9,
-				src: "/assets/images/characters/people/npc1.png",
-			}),
-		};
+		// Load Initial Map
+		this.map = new OverworldMap(window.OverworldMap.kitchen);
 
 		this.startGameLoop();
 	}
