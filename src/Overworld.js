@@ -15,13 +15,14 @@ export class Overworld {
 			// Clear the canvas
 			this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-			// Establkish the camera person (for now, just the hero)
+			// Establish the camera person (for now, just the hero)
 			const cameraPerson = this.map.gameObjects.hero;
 
 			// Update all object
 			Object.values(this.map.gameObjects).forEach((object) => {
 				object.update({
 					arrow: this.directionInput.direction,
+					map: this.map,
 				});
 			});
 
@@ -47,6 +48,8 @@ export class Overworld {
 	init() {
 		// Load Initial Map
 		this.map = new OverworldMap(window.OverworldMap.DemoRoom);
+		this.map.mountObjects();
+
 		this.directionInput = new DirectionInput();
 		this.directionInput.init();
 		this.directionInput.direction; // "up", "down", "left", "right"

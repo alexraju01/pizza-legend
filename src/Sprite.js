@@ -63,7 +63,6 @@ export class Sprite {
 	}
 
 	setAnimation(key) {
-		console.log("Setting animation key to:", key);
 		if (this.currentAnimation !== key) {
 			this.currentAnimation = key;
 			this.currentAnimationFrame = 0;
